@@ -29,14 +29,19 @@ resource "aws_internet_gateway" "prod_a_igw" {
   }
 }
 
+
+resource "aws_route" "prod_a_default_igw" {
+  provider                = aws.region_a
+  route_table_id           = aws_route_table.prod_a_rt.id
+  destination_cidr_block   = "0.0.0.0/0"
+  gateway_id               = aws_internet_gateway.prod_a_igw.id
+}
+
+
+
 resource "aws_route_table" "prod_a_rt" {
   provider = aws.region_a
   vpc_id   = aws_vpc.prod_a.id
-
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.prod_a_igw.id
-  }
 
   tags = {
     Name = "prod-a-rt"
@@ -81,16 +86,19 @@ resource "aws_internet_gateway" "dev_a_igw" {
   }
 }
 
+resource "aws_route" "dev_a_default_igw" {
+  provider                = aws.region_a
+  route_table_id           = aws_route_table.dev_a_rt.id
+  destination_cidr_block   = "0.0.0.0/0"
+  gateway_id               = aws_internet_gateway.dev_a_igw.id
+}
+
+
 resource "aws_route_table" "dev_a_rt" {
   provider = aws.region_a
   vpc_id   = aws_vpc.dev_a.id
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.dev_a_igw.id
-  }
-
-  tags = {
+tags = {
     Name = "dev-a-rt"
   }
 }

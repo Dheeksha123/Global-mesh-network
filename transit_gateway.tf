@@ -11,7 +11,7 @@ resource "aws_ec2_transit_gateway" "tgw_a" {
   }
 }
 
-resource "aws_ec2_transit_gateway_vpc_attachment" "hub_attachment" {
+resource "aws_ec2_transit_gateway_vpc_attachment" "hub_attach" {
   provider = aws.region_a
 
   transit_gateway_id = aws_ec2_transit_gateway.tgw_a.id
@@ -26,7 +26,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "hub_attachment" {
   }
 }
 
-resource "aws_ec2_transit_gateway_vpc_attachment" "prod_a_attachment" {
+resource "aws_ec2_transit_gateway_vpc_attachment" "prod_attach" {
   provider = aws.region_a
 
   transit_gateway_id = aws_ec2_transit_gateway.tgw_a.id
@@ -41,7 +41,7 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "prod_a_attachment" {
   }
 }
 
-resource "aws_ec2_transit_gateway_vpc_attachment" "dev_a_attachment" {
+resource "aws_ec2_transit_gateway_vpc_attachment" "dev_attach" {
   provider = aws.region_a
 
   transit_gateway_id = aws_ec2_transit_gateway.tgw_a.id

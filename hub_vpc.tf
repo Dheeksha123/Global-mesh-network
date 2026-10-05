@@ -48,10 +48,6 @@ resource "aws_route_table" "hub_fw_rt" {
 
   vpc_id = aws_vpc.hub.id
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.hub_igw.id
-  }
 
   tags = {
     Name = "hub-fw-rt"
