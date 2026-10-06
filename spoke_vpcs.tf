@@ -10,7 +10,8 @@ resource "aws_vpc" "prod_a" {
 }
 
 resource "aws_subnet" "prod_a_app" {
-  provider          = aws.region_a
+  provider = aws.region_a
+
   vpc_id            = aws_vpc.prod_a.id
   cidr_block        = "10.1.1.0/24"
   availability_zone = "${var.region_a}a"
@@ -22,34 +23,38 @@ resource "aws_subnet" "prod_a_app" {
 
 resource "aws_internet_gateway" "prod_a_igw" {
   provider = aws.region_a
-  vpc_id   = aws_vpc.prod_a.id
+
+  vpc_id = aws_vpc.prod_a.id
 
   tags = {
     Name = "prod-a-igw"
   }
 }
 
-
-resource "aws_route" "prod_a_default_igw" {
-  provider                = aws.region_a
-  route_table_id           = aws_route_table.prod_a_rt.id
-  destination_cidr_block   = "0.0.0.0/0"
-  gateway_id               = aws_internet_gateway.prod_a_igw.id
-}
-
-
+# Empty route table.
+# Routes are created separately using aws_route.
 
 resource "aws_route_table" "prod_a_rt" {
   provider = aws.region_a
-  vpc_id   = aws_vpc.prod_a.id
+
+  vpc_id = aws_vpc.prod_a.id
 
   tags = {
     Name = "prod-a-rt"
   }
 }
 
+resource "aws_route" "prod_a_default_igw" {
+  provider = aws.region_a
+
+  route_table_id         = aws_route_table.prod_a_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.prod_a_igw.id
+}
+
 resource "aws_route_table_association" "prod_a_assoc" {
-  provider       = aws.region_a
+  provider = aws.region_a
+
   subnet_id      = aws_subnet.prod_a_app.id
   route_table_id = aws_route_table.prod_a_rt.id
 }
@@ -67,7 +72,8 @@ resource "aws_vpc" "dev_a" {
 }
 
 resource "aws_subnet" "dev_a_app" {
-  provider          = aws.region_a
+  provider = aws.region_a
+
   vpc_id            = aws_vpc.dev_a.id
   cidr_block        = "10.2.1.0/24"
   availability_zone = "${var.region_a}a"
@@ -79,32 +85,35 @@ resource "aws_subnet" "dev_a_app" {
 
 resource "aws_internet_gateway" "dev_a_igw" {
   provider = aws.region_a
-  vpc_id   = aws_vpc.dev_a.id
+
+  vpc_id = aws_vpc.dev_a.id
 
   tags = {
     Name = "dev-a-igw"
   }
 }
 
-resource "aws_route" "dev_a_default_igw" {
-  provider                = aws.region_a
-  route_table_id           = aws_route_table.dev_a_rt.id
-  destination_cidr_block   = "0.0.0.0/0"
-  gateway_id               = aws_internet_gateway.dev_a_igw.id
-}
-
-
 resource "aws_route_table" "dev_a_rt" {
   provider = aws.region_a
-  vpc_id   = aws_vpc.dev_a.id
 
-tags = {
+  vpc_id = aws_vpc.dev_a.id
+
+  tags = {
     Name = "dev-a-rt"
   }
 }
 
+resource "aws_route" "dev_a_default_igw" {
+  provider = aws.region_a
+
+  route_table_id         = aws_route_table.dev_a_rt.id
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = aws_internet_gateway.dev_a_igw.id
+}
+
 resource "aws_route_table_association" "dev_a_assoc" {
-  provider       = aws.region_a
+  provider = aws.region_a
+
   subnet_id      = aws_subnet.dev_a_app.id
   route_table_id = aws_route_table.dev_a_rt.id
 }
